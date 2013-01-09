@@ -21,6 +21,16 @@ module Sinatra
       Sequel.connect url.join('')
     end
 
+    def postgres_service(version, service_name=nil)
+      service = vcap_service("postgresql-" + version, service_name)
+      creds = OpenStruct.new(service['credentials'])
+      url  = ["postgres://"]
+      url << "#{creds.username}:#{creds.password}"
+      url << "@#{creds.host}:#{creds.port}"
+      url << "/#{creds.name}"
+      Sequel.connect url.join('')
+    end
+
     def vcap_service(service_type, service_name=nil)
       services = vcap.services[service_type]
       if !service_name.nil?
