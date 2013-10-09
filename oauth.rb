@@ -38,11 +38,11 @@ module Sinatra
     def self.registered(app)
       app.helpers OAuth::Helpers
 
-      get "/session/auth/:provider" do
+      app.get "/session/auth/:provider" do
         redirect client.auth_code.authorize_url(:redirect_uri => redirect_uri(params[:provider]),:scope => SCOPES,:access_type => "offline")
       end
 
-      get '/oauth2callback/:provider' do
+      app.get '/oauth2callback/:provider' do
         access_token = client.auth_code.get_token(params[:code], :redirect_uri => redirect_uri(params[:provider]))
         if access_token
           provider = params[:provider]

@@ -42,7 +42,7 @@ module Sinatra
     end
 
     def self.registered(app)
-      set :vcap, OpenStruct.new({
+      app.set :vcap, OpenStruct.new({
         application: OpenStruct.new(JSON.parse(ENV.fetch('VCAP_APPLICATION', "{}"))),
         services: JSON.parse(ENV.fetch('VCAP_SERVICES', "{}"))
       })
